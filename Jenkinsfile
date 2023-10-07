@@ -16,5 +16,19 @@ pipeline {
                 sh './jenkins/scripts/test.sh'
             }
         }
+        stage('Manual Approval') {
+            steps {
+                // Menunggu persetujuan manual
+                input message: 'Lanjutkan ke tahap selanjutnya (Deploy)?'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                // User bisa melakukan test App's selama se-menit
+                sh 'sleep 1m'
+                sh './jenkins/scripts/kill.sh'
+            }
+        }
     }
 }
